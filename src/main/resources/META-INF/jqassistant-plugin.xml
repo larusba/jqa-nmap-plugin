@@ -1,0 +1,19 @@
+<jqa-plugin:jqassistant-plugin
+        xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.1" name="NMap Network Plugin">
+    <description>Provides a scanner for XML output file of nmap command.</description>
+    <model>
+        <class>it.larus.jqassistant.plugin.nmap.domain.FileNetworkDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.HostDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkPortDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkServiceDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkServiceInstanceDescriptor</class>
+    </model>
+    <scanner>
+        <class>it.larus.jqassistant.plugin.nmap.NMapFileScannerPlugin</class>
+    </scanner>
+    <rules>
+        <resource>nmap-rules.xml</resource>
+    </rules>
+</jqa-plugin:jqassistant-plugin>
+

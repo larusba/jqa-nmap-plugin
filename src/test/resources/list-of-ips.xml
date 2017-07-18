@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/local/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.50 scan initiated Mon Jul 17 10:28:21 2017 as: nmap -oX list-of-ips.xml -p 0-10000 -iL list-of-ips.txt -->
+<nmaprun scanner="nmap" args="nmap -oX list-of-ips.xml -p 0-10000 -iL list-of-ips.txt" start="1500280101" startstr="Mon Jul 17 10:28:21 2017" version="7.50" xmloutputversion="1.04">
+  <scaninfo type="connect" protocol="tcp" numservices="10001" services="0-10000"/>
+  <verbose level="0"/>
+  <debugging level="0"/>
+  <host starttime="1500280101" endtime="1500280213">
+    <status state="up" reason="conn-refused" reason_ttl="0"/>
+    <address addr="127.0.0.1" addrtype="ipv4"/>
+    <hostnames>
+      <hostname name="localhost" type="PTR"/>
+    </hostnames>
+    <ports>
+      <extraports state="closed" count="9996">
+        <extrareasons reason="conn-refused" count="9996"/>
+      </extraports>
+      <port protocol="tcp" portid="0">
+        <state state="filtered" reason="no-response" reason_ttl="0"/>
+      </port>
+      <port protocol="tcp" portid="5432">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="postgresql" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="7473">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="rise" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="7474">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="neo4j" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="7687">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="bolt" method="table" conf="3"/>
+      </port>
+    </ports>
+    <times srtt="265" rttvar="36" to="100000"/>
+  </host>
+  <host starttime="1500280101" endtime="1500280103">
+    <status state="up" reason="syn-ack" reason_ttl="0"/>
+    <address addr="192.168.178.1" addrtype="ipv4"/>
+    <hostnames>
+      <hostname name="fritz.box" type="PTR"/>
+    </hostnames>
+    <ports>
+      <extraports state="closed" count="9985">
+        <extrareasons reason="conn-refused" count="9985"/>
+      </extraports>
+      <port protocol="tcp" portid="0">
+        <state state="filtered" reason="no-response" reason_ttl="0"/>
+      </port>
+      <port protocol="tcp" portid="21">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="ftp" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="53">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="domain" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="80">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="http" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="139">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="netbios-ssn" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="443">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="https" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="445">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="microsoft-ds" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="5060">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="sip" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="8089">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="unknown" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="8182">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="vmware-fdm" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="8183">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="proremote" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="8184">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="itach" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="8185">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+      </port>
+      <port protocol="tcp" portid="8186">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+      </port>
+      <port protocol="tcp" portid="9100">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="jetdirect" method="table" conf="3"/>
+      </port>
+      <port protocol="tcp" portid="9101">
+        <state state="open" reason="syn-ack" reason_ttl="0"/>
+        <service name="jetdirect" method="table" conf="3"/>
+      </port>
+    </ports>
+    <times srtt="14346" rttvar="6141" to="100000"/>
+  </host>
+  <runstats>
+    <finished time="1500280213" timestr="Mon Jul 17 10:30:13 2017" elapsed="111.49" summary="Nmap done at Mon Jul 17 10:30:13 2017; 2 IP addresses (2 hosts up) scanned in 111.49 seconds" exit="success"/>
+    <hosts up="2" down="0" total="2"/>
+  </runstats>
+</nmaprun>

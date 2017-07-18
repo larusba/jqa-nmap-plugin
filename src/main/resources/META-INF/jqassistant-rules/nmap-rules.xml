@@ -1,0 +1,29 @@
+<jqa:jqassistant-rules xmlns:jqa="http://www.buschmais.com/jqassistant/core/analysis/rules/schema/v1.0">
+
+    <concept id="nmap-rules:CreateService">
+        <description>Add to graph the "NetworkService" nodes.</description>
+        <cypher><![CDATA[
+            MATCH
+              (nsi:NetworkServiceInstance)
+            WITH DISTINCT nsi.name AS service_name
+            MERGE (s:NetworkService {name: service_name})
+            RETURN
+                service_name AS ServiceName
+        ]]></cypher>
+    </concept>
+
+    <concept id="nmap-rules:LinkServiceToInstance">
+        <requiresConcept refId="nmap-rules:CreateService" />
+        <description>Add to graph the relationship between NetworkService and NetworkServiceInstance nodes.</description>
+        <cypher><![CDATA[
+            MATCH
+                (s:NetworkService), (si:NetworkServiceInstance)
+            WHERE s.name = si.name
+            MERGE (s)-[:HAS_INSTANCE]->(si)
+            RETURN
+                count(si) as RelationshipsCount
+        ]]></cypher>
+    </concept>
+
+</jqa:jqassistant-rules>
+
