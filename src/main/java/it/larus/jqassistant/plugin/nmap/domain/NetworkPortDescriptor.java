@@ -15,11 +15,11 @@ public interface NetworkPortDescriptor extends Descriptor {
     String getState();
     String getProtocol();
 
-    @Relation("ON_PORT")
+    @Relation("SERVICE_ON_PORT")
     @Relation.Incoming
     NetworkServiceInstanceDescriptor getServiceInstance();
 
-    @Relation("ON_PORT")
+    @Relation("SCRIPT_ON_PORT")
     @Relation.Incoming
     List<NetworkScriptDescriptor> getScripts();
 
