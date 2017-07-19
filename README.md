@@ -12,6 +12,9 @@ The scan operation creates the nodes with labels:
 - Host
 - NetworkPort
 - NetworkServiceInstance
+- NetworkScript
+- NetworkScriptElem
+- NetworkScriptTable
 
 # Rules
 There are 2 concepts shipped with the plugin:
@@ -29,7 +32,7 @@ Please, make sure the *com.buschmais.jqassistant.plugin-common-1.3.jar* is prese
 # Scan Example
 Scan a local network and create the *network.xml* file
 ```
-nmap -oX network.xml -p 0-10000 -sV 192.168.178.1-254
+nmap -T4 -A -p 1-1000 -oX network.xml scanme.nmap.org
 ./bin/jqassistant.sh scan -reset -f network.xml
 ./bin/jqassistant.sh server
 ```

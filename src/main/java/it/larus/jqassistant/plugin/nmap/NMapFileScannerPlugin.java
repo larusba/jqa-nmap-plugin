@@ -33,6 +33,13 @@ public class NMapFileScannerPlugin extends AbstractScannerPlugin<FileResource, F
 
                 return true;
             }catch (JAXBException e) {
+                /*
+                String verbose = System.getProperty("nmap.verbose", "false");
+                if(Boolean.parseBoolean(verbose)){
+                    LOGGER.warn(s+" is not a nmap output file",e);
+                }else {
+                }
+                */
                 LOGGER.debug(s+" is not a nmap output file");
                 return false;
             }

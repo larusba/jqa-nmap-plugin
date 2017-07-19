@@ -1,5 +1,7 @@
 package it.larus.jqassistant.plugin.nmap.domain;
 
+import java.util.List;
+
 /**
  * Created by omar on 18/07/17.
  */
@@ -8,6 +10,7 @@ public class NetworkPortDescriptorStub implements NetworkPortDescriptor {
     String state;
     String protocol;
     NetworkServiceInstanceDescriptor instanceService;
+    List<NetworkScriptDescriptor> scripts;
 
     @Override
     public long getPort() {
@@ -40,8 +43,18 @@ public class NetworkPortDescriptorStub implements NetworkPortDescriptor {
     }
 
     @Override
+    public List<NetworkScriptDescriptor> getScripts() {
+        return scripts;
+    }
+
+    @Override
     public void setServiceInstance(NetworkServiceInstanceDescriptor instance) {
         this.instanceService = instance;
+    }
+
+    @Override
+    public void setScripts(List<NetworkScriptDescriptor> scripts) {
+        this.scripts = scripts;
     }
 
     @Override

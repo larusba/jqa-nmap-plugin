@@ -12,7 +12,7 @@ public class HostDescriptorStub implements HostDescriptor {
     String hostname;
     List<NetworkServiceDescriptor> services;
     List<NetworkPortDescriptor> ports;
-
+    List<NetworkScriptDescriptor> scripts;
 
     @Override
     public String getState() {
@@ -35,6 +35,11 @@ public class HostDescriptorStub implements HostDescriptor {
     }
 
     @Override
+    public List<NetworkScriptDescriptor> getScripts() {
+        return scripts;
+    }
+
+    @Override
     public void setState(String state) {
         this.state = state;
     }
@@ -52,5 +57,10 @@ public class HostDescriptorStub implements HostDescriptor {
     @Override
     public void setPorts(List<NetworkPortDescriptor> ports) {
         this.ports = ports;
+    }
+
+    @Override
+    public void setScripts(List<NetworkScriptDescriptor> scripts) {
+        this.scripts = scripts;
     }
 }

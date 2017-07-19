@@ -28,6 +28,9 @@ public class StoreStub implements Store{
         stubmap.put(NetworkPortDescriptor.class, NetworkPortDescriptorStub.class);
         stubmap.put(NetworkServiceDescriptor.class, NetworkServiceDescriptorStub.class);
         stubmap.put(NetworkServiceInstanceDescriptor.class, NetworkServiceInstanceDescriptorStub.class);
+        stubmap.put(NetworkScriptDescriptor.class, NetworkScriptDescriptorStub.class);
+        stubmap.put(NetworkScriptElemDescriptor.class, NetworkScriptElemDescriptorStub.class);
+        stubmap.put(NetworkScriptTableDescriptor.class, NetworkScriptTableDescriptorStub.class);
 
     }
 

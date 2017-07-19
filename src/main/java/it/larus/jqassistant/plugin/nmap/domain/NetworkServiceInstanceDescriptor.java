@@ -10,6 +10,14 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 public interface NetworkServiceInstanceDescriptor extends Descriptor{
 
     String getName();
+    String getProduct();
+    String getVersion();
+    String getDeviceType();
+    String getExtraInfo();
 
     void setName(String name);
+    void setProduct(String product);
+    void setVersion(String version);
+    void setDeviceType(String deviceType);
+    void setExtraInfo(String extraInfo);
 }

@@ -8,22 +8,19 @@
 
 package it.larus.jqassistant.plugin.nmap.xml;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.NormalizedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * 
+ * MODIFIED
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "value"
+    "tableOrElem"
 })
 @XmlRootElement(name = "script")
 public class Script {
@@ -34,8 +31,12 @@ public class Script {
     @XmlAttribute(name = "output", required = true)
     @XmlJavaTypeAdapter(NormalizedStringAdapter.class)
     protected String output;
-    @XmlValue
-    protected String value;
+
+    @XmlElements({
+            @XmlElement(name = "table", type = Table.class),
+            @XmlElement(name = "elem", type = Elem.class)
+    })
+    protected List<Object> tableOrElem;
 
     /**
      * Recupera il valore della proprietà id.
@@ -86,27 +87,32 @@ public class Script {
     }
 
     /**
-     * Recupera il valore della proprietà value.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     * Gets the value of the tableOrElem property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the tableOrElem property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTableOrElem().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Table }
+     * {@link Elem }
+     *
+     *
      */
-    public String getvalue() {
-        return value;
+    public List<Object> getTableOrElem() {
+        if (tableOrElem == null) {
+            tableOrElem = new ArrayList<Object>();
+        }
+        return this.tableOrElem;
     }
-
-    /**
-     * Imposta il valore della proprietà value.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setvalue(String value) {
-        this.value = value;
-    }
-
 }

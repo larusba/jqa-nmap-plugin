@@ -19,10 +19,14 @@ public interface HostDescriptor extends Descriptor {
     @Relation("HAS_PORT")
     List<NetworkPortDescriptor> getPorts();
 
+    @Relation("ON_HOST")
+    @Relation.Incoming
+    List<NetworkScriptDescriptor> getScripts();
 
     void setState(String state);
     void setAddress(String address);
     void setHostname(String hostname);
 
     void setPorts(List<NetworkPortDescriptor> ports);
+    void setScripts(List<NetworkScriptDescriptor> scripts);
 }

@@ -2,10 +2,7 @@ package it.larus.jqassistant.plugin.nmap.scanner;
 
 import com.buschmais.jqassistant.core.store.api.Store;
 import it.larus.jqassistant.plugin.nmap.api.XmlNetwork2Graph;
-import it.larus.jqassistant.plugin.nmap.domain.FileNetworkDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.HostDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.NetworkPortDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.NetworkServiceInstanceDescriptor;
+import it.larus.jqassistant.plugin.nmap.domain.*;
 import it.larus.jqassistant.plugin.nmap.xml.*;
 
 import java.util.ArrayList;
@@ -88,6 +85,14 @@ public class XmlNetwork2GraphImpl implements XmlNetwork2Graph {
                     buildPortAndService(ports, hostDescriptor);
                 }
             }
+            if(o instanceof Hostscript){
+                List<Script> scriptList = ((Hostscript) o).getScript();
+                List<NetworkScriptDescriptor> scriptDescriptors = new ArrayList<>();
+                for (Script script : scriptList){
+                    scriptDescriptors.add(buildScript(script));
+                }
+                hostDescriptor.setScripts(scriptDescriptors);
+            }
         }
         return hostDescriptor;
     }
@@ -113,11 +118,83 @@ public class XmlNetwork2GraphImpl implements XmlNetwork2Graph {
             portDescriptor.setProtocol(nmapPort.getProtocol());
         }
 
-        if(nmapPort.getService() != null){
+        Service service = nmapPort.getService();
+        if(service != null){
             NetworkServiceInstanceDescriptor serviceDescriptor = store.create(NetworkServiceInstanceDescriptor.class);
-            serviceDescriptor.setName(nmapPort.getService().getName());
+            serviceDescriptor.setName(service.getName());
+            serviceDescriptor.setProduct(service.getProduct());
+            serviceDescriptor.setVersion(service.getVersion());
+            serviceDescriptor.setDeviceType(service.getDevicetype());
+            serviceDescriptor.setExtraInfo(service.getExtrainfo());
+
             portDescriptor.setServiceInstance(serviceDescriptor);
         }
 
+        List<NetworkScriptDescriptor> scripts = new ArrayList<>();
+        portDescriptor.setScripts(scripts);
+        List<Script> nmapScripts = nmapPort.getScript();
+        for (Script nmapScript : nmapScripts){
+            portDescriptor.getScripts().add(buildScript(nmapScript));
+        }
+    }
+
+    /**
+     * Extract infomation from script element
+     * @param nmapScript
+     * @return
+     */
+    private NetworkScriptDescriptor buildScript(Script nmapScript) {
+        NetworkScriptDescriptor script = store.create(NetworkScriptDescriptor.class);
+        script.setId(nmapScript.getId());
+        script.setOutput(nmapScript.getOutput());
+
+        List<Object> nmapTableOrElem = nmapScript.getTableOrElem();
+
+        List<NetworkScriptElemDescriptor> elems = new ArrayList<>();
+        List<NetworkScriptTableDescriptor> tables = new ArrayList<>();
+
+        fillTableElems(nmapTableOrElem, elems, tables);
+
+        //put here so the framework correctly links the nodes
+        script.setElems(elems);
+        script.setTables(tables);
+
+        return script;
+    }
+
+    /**
+     * Recursive method for fill the table and elem lists
+     * @param nmapTableOrElem
+     * @param elems
+     * @param tables
+     */
+    private void fillTableElems(List<Object> nmapTableOrElem, List<NetworkScriptElemDescriptor> elems, List<NetworkScriptTableDescriptor> tables) {
+        for (Object toe : nmapTableOrElem){
+            if( toe instanceof Table){
+                Table nmapTable = (Table) toe;
+                NetworkScriptTableDescriptor tableDescriptor = store.create(NetworkScriptTableDescriptor.class);
+                tableDescriptor.setKey(nmapTable.getKey());
+                tables.add(tableDescriptor);
+
+                List<Object> internalTableOrElem = nmapTable.getTableOrElem();
+                if(! internalTableOrElem.isEmpty()){
+                    List<NetworkScriptElemDescriptor> internalElems = new ArrayList<>();
+                    List<NetworkScriptTableDescriptor> internalTables = new ArrayList<>();
+                    fillTableElems(internalTableOrElem, internalElems, internalTables);
+
+                    tableDescriptor.setElems(internalElems);
+                    tableDescriptor.setTables(internalTables);
+                }
+            }
+            if( toe instanceof Elem){
+                Elem nmapElem = (Elem) toe;
+
+                NetworkScriptElemDescriptor elem = store.create(NetworkScriptElemDescriptor.class);
+                elem.setKey(nmapElem.getKey());
+                elem.setValue(nmapElem.getvalue());
+
+                elems.add(elem);
+            }
+        }
     }
 }

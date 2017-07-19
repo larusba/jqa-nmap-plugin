@@ -1,9 +1,6 @@
 package it.larus.jqassistant.plugin.nmap.scanner;
 
-import it.larus.jqassistant.plugin.nmap.domain.FileNetworkDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.HostDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.NetworkPortDescriptor;
-import it.larus.jqassistant.plugin.nmap.domain.NetworkServiceInstanceDescriptor;
+import it.larus.jqassistant.plugin.nmap.domain.*;
 import it.larus.jqassistant.plugin.nmap.xml.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -156,4 +153,204 @@ public class XmlNetwork2GraphImplTest {
         //assertEquals(hostDescriptor.getPorts().get(1), hostDescriptor.getPorts().get(1).getServiceInstance().getPorts().get(0));
     }
 
+    @Test
+    public void testCreateServicesWithData() {
+        Nmaprun nmaprun = new Nmaprun();
+        List<Object> hostList = nmaprun.getTargetOrTaskbeginOrTaskprogressOrTaskendOrPrescriptOrPostscriptOrHostOrOutput();
+        Host host1 = new Host();
+        List<Object> host1Content = host1.getStatusOrAddressOrHostnamesOrSmurfOrPortsOrOsOrDistanceOrUptimeOrTcpsequenceOrIpidsequenceOrTcptssequenceOrHostscriptOrTraceOrTimes();
+
+        Port port1 = new Port();
+        port1.setPortid("5432");
+        port1.setProtocol("tcp");
+        Service service1 = new Service();
+        service1.setName("postgresql");
+        service1.setProduct("PostgreSQL DB");
+        service1.setVersion("9.6.0 or later");
+        service1.setDevicetype("broadband router");
+        service1.setExtrainfo("workgroup: WORKGROUP");
+        port1.setService(service1);
+
+        Ports ports = new Ports();
+        ports.getPort().add(port1);
+
+        host1Content.add(ports);
+        hostList.add(host1);
+
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        HostDescriptor hostDescriptor = graph.getHosts().get(0);
+
+        NetworkServiceInstanceDescriptor serviceInstance = hostDescriptor.getPorts().get(0).getServiceInstance();
+        assertEquals("postgresql", serviceInstance.getName());
+        assertEquals("PostgreSQL DB", serviceInstance.getProduct());
+        assertEquals("9.6.0 or later", serviceInstance.getVersion());
+        assertEquals("broadband router", serviceInstance.getDeviceType());
+        assertEquals("workgroup: WORKGROUP", serviceInstance.getExtraInfo());
+
+    }
+
+    @Test
+    public void testCreateScript() {
+        Nmaprun nmaprun = new Nmaprun();
+        List<Object> hostList = nmaprun.getTargetOrTaskbeginOrTaskprogressOrTaskendOrPrescriptOrPostscriptOrHostOrOutput();
+        Host host1 = new Host();
+        List<Object> host1Content = host1.getStatusOrAddressOrHostnamesOrSmurfOrPortsOrOsOrDistanceOrUptimeOrTcpsequenceOrIpidsequenceOrTcptssequenceOrHostscriptOrTraceOrTimes();
+
+        Port port1 = new Port();
+        port1.setPortid("443");
+        port1.setProtocol("tcp");
+
+        Script script = new Script();
+        script.setId("ssl-cert");
+        script.setOutput("output");
+        port1.getScript().add(script);
+
+        Ports ports = new Ports();
+        ports.getPort().add(port1);
+
+        host1Content.add(ports);
+        hostList.add(host1);
+
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        HostDescriptor hostDescriptor = graph.getHosts().get(0);
+        NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
+        assertNotNull(networkScriptDescriptor);
+        assertEquals("ssl-cert", networkScriptDescriptor.getId());
+        assertEquals("output", networkScriptDescriptor.getOutput());
+        assertTrue(store.instances.get(NetworkScriptDescriptor.class).contains(networkScriptDescriptor));
+    }
+
+    @Test
+    public void testCreateScriptElem() {
+        Nmaprun nmaprun = new Nmaprun();
+        List<Object> hostList = nmaprun.getTargetOrTaskbeginOrTaskprogressOrTaskendOrPrescriptOrPostscriptOrHostOrOutput();
+        Host host1 = new Host();
+        List<Object> host1Content = host1.getStatusOrAddressOrHostnamesOrSmurfOrPortsOrOsOrDistanceOrUptimeOrTcpsequenceOrIpidsequenceOrTcptssequenceOrHostscriptOrTraceOrTimes();
+
+        Port port1 = new Port();
+        port1.setPortid("443");
+        port1.setProtocol("tcp");
+
+        Script script = new Script();
+        script.setId("ssl-cert");
+        Elem elem = new Elem();
+        elem.setKey("sig_algo");
+        elem.setvalue("sha256WithRSAEncryption");
+        script.getTableOrElem().add(elem);
+        port1.getScript().add(script);
+
+        Ports ports = new Ports();
+        ports.getPort().add(port1);
+
+        host1Content.add(ports);
+        hostList.add(host1);
+
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        HostDescriptor hostDescriptor = graph.getHosts().get(0);
+        NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
+        NetworkScriptElemDescriptor elemDescriptor = networkScriptDescriptor.getElems().get(0);
+        assertNotNull(elemDescriptor);
+        assertEquals("sig_algo", elemDescriptor.getKey());
+        assertEquals("sha256WithRSAEncryption", elemDescriptor.getValue());
+
+        assertTrue(store.instances.get(NetworkScriptElemDescriptor.class).contains(elemDescriptor));
+    }
+
+    @Test
+    public void testCreateScriptTables() {
+        Nmaprun nmaprun = new Nmaprun();
+        List<Object> hostList = nmaprun.getTargetOrTaskbeginOrTaskprogressOrTaskendOrPrescriptOrPostscriptOrHostOrOutput();
+        Host host1 = new Host();
+        List<Object> host1Content = host1.getStatusOrAddressOrHostnamesOrSmurfOrPortsOrOsOrDistanceOrUptimeOrTcpsequenceOrIpidsequenceOrTcptssequenceOrHostscriptOrTraceOrTimes();
+
+        Port port1 = new Port();
+        port1.setPortid("443");
+        port1.setProtocol("tcp");
+
+        Script script = new Script();
+        script.setId("ssl-cert");
+        Table table = new Table();
+        table.setKey("extensions");
+
+        Table internalTable = new Table();
+
+        Elem elemName = new Elem();
+        elemName.setKey("name");
+        elemName.setvalue("X509v3 Subject Alternative Name");
+
+        Elem elemValue = new Elem();
+        elemValue.setKey("value");
+        elemValue.setvalue("DNS:www.myfritz.box");
+
+        Elem elemCritical = new Elem();
+        elemCritical.setKey("critical");
+        elemCritical.setvalue("true");
+
+        internalTable.getTableOrElem().add(elemName);
+        internalTable.getTableOrElem().add(elemValue);
+        internalTable.getTableOrElem().add(elemCritical);
+        table.getTableOrElem().add(internalTable);
+        script.getTableOrElem().add(table);
+        port1.getScript().add(script);
+
+        Ports ports = new Ports();
+        ports.getPort().add(port1);
+
+        host1Content.add(ports);
+        hostList.add(host1);
+
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        HostDescriptor hostDescriptor = graph.getHosts().get(0);
+        NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
+        NetworkScriptTableDescriptor tableDescriptor = networkScriptDescriptor.getTables().get(0);
+
+        assertNotNull(tableDescriptor);
+        assertEquals("extensions",tableDescriptor.getKey());
+        assertNotNull(tableDescriptor.getTables());
+        assertNotNull(tableDescriptor.getTables().get(0).getElems());
+        assertEquals(3, tableDescriptor.getTables().get(0).getElems().size());
+
+        assertEquals("name", tableDescriptor.getTables().get(0).getElems().get(0).getKey());
+        assertEquals("X509v3 Subject Alternative Name", tableDescriptor.getTables().get(0).getElems().get(0).getValue());
+
+        assertEquals("value", tableDescriptor.getTables().get(0).getElems().get(1).getKey());
+        assertEquals("DNS:www.myfritz.box", tableDescriptor.getTables().get(0).getElems().get(1).getValue());
+
+        assertEquals("critical", tableDescriptor.getTables().get(0).getElems().get(2).getKey());
+        assertEquals("true", tableDescriptor.getTables().get(0).getElems().get(2).getValue());
+
+        assertTrue(store.instances.get(NetworkScriptTableDescriptor.class).contains(tableDescriptor));
+    }
+
+    @Test
+    public void testHostscript() throws Exception {
+        Nmaprun nmaprun = new Nmaprun();
+        List<Object> hostList = nmaprun.getTargetOrTaskbeginOrTaskprogressOrTaskendOrPrescriptOrPostscriptOrHostOrOutput();
+        Host host1 = new Host();
+        List<Object> host1Content = host1.getStatusOrAddressOrHostnamesOrSmurfOrPortsOrOsOrDistanceOrUptimeOrTcpsequenceOrIpidsequenceOrTcptssequenceOrHostscriptOrTraceOrTimes();
+
+        Hostscript nmapHostscript = new Hostscript();
+
+        Script script = new Script();
+        script.setId("nbstat");
+        Elem elem = new Elem();
+        elem.setKey("server_name");
+        elem.setvalue("FRITZ");
+        script.getTableOrElem().add(elem);
+        nmapHostscript.getScript().add(script);
+
+        host1Content.add(nmapHostscript);
+        hostList.add(host1);
+
+
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        HostDescriptor hostDescriptor = graph.getHosts().get(0);
+
+        assertNotNull(hostDescriptor.getScripts());
+        assertEquals("nbstat",hostDescriptor.getScripts().get(0).getId());
+        assertEquals("server_name",hostDescriptor.getScripts().get(0).getElems().get(0).getKey());
+        assertEquals("FRITZ",hostDescriptor.getScripts().get(0).getElems().get(0).getValue());
+
+        assertTrue(store.instances.get(NetworkScriptDescriptor.class).contains(hostDescriptor.getScripts().get(0)));
+    }
 }

@@ -8,6 +8,9 @@
         <class>it.larus.jqassistant.plugin.nmap.domain.NetworkPortDescriptor</class>
         <class>it.larus.jqassistant.plugin.nmap.domain.NetworkServiceDescriptor</class>
         <class>it.larus.jqassistant.plugin.nmap.domain.NetworkServiceInstanceDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkScriptDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkScriptElemDescriptor</class>
+        <class>it.larus.jqassistant.plugin.nmap.domain.NetworkScriptTableDescriptor</class>
     </model>
     <scanner>
         <class>it.larus.jqassistant.plugin.nmap.NMapFileScannerPlugin</class>
