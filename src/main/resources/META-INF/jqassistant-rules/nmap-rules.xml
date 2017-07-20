@@ -25,5 +25,32 @@
         ]]></cypher>
     </concept>
 
+    <concept id="nmap-rules:MySqlDatabases">
+        <description>Add to graph the MySqlSchema nodes.</description>
+        <cypher><![CDATA[
+            MATCH
+               (s:NetworkScript)-[:SCRIPT_ON_PORT]->(port)<-[:SERVICE_ON_PORT]-(serv:NetworkServiceInstance)
+            WHERE s.id = 'mysql-databases'
+            WITH serv, filter(schema IN split(s.output,' ') WHERE schema <> '') as all_schemas
+            UNWIND all_schemas AS schema
+            MERGE (ms:MySqlSchema {schema: schema})
+            MERGE (ms)-[:RUNS_ON]->(serv)
+            RETURN ms
+        ]]></cypher>
+    </concept>
+
+    <concept id="nmap-rules:OracleSid">
+        <description>Add to graph the OracleSid nodes.</description>
+        <cypher><![CDATA[
+            MATCH
+               (s:NetworkScript)-[:SCRIPT_ON_PORT]->(port)<-[:SERVICE_ON_PORT]-(serv:NetworkServiceInstance)
+            WHERE s.id = 'oracle-sid-brute'
+            WITH serv, filter(schema IN split(replace(s.output,'\\x0D',' '),' ')  WHERE schema <> '') as all_schemas
+            UNWIND all_schemas AS schema
+            MERGE (ms:OracleSid {sid: schema})
+            MERGE (ms)-[:RUNS_ON]->(serv)
+            RETURN ms AS sid
+        ]]></cypher>
+    </concept>
 </jqa:jqassistant-rules>
 

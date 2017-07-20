@@ -5,6 +5,7 @@ NMap Plugin of jQAssistant. It enables jQAssistant to scan and to analyze nmap x
 - [Nmap](https://nmap.org/) 7.50
 - [JQAssistant](https://www.jqassistant.org) 1.1.3
 - Java 1.7
+- Neo4j 3.2
                   
 # Graph
 The scan operation creates the nodes with labels: 
@@ -16,10 +17,14 @@ The scan operation creates the nodes with labels:
 - NetworkScriptElem
 - NetworkScriptTable
 
+The nodes are always created, not merged.
+
 # Rules
-There are 2 concepts shipped with the plugin:
-- "nmap-rules:CreateService": add to graph the "NetworkService" nodes
-- "nmap-rules:LinkServiceToInstance": add to graph the relationship between NetworkService and NetworkServiceInstance nodes.
+There are 4 concepts shipped with the plugin:
+- "nmap-rules:CreateService": Add to graph the "NetworkService" nodes
+- "nmap-rules:LinkServiceToInstance": Add to graph the relationship between NetworkService and NetworkServiceInstance nodes.
+- "nmap-rules:MySqlDatabases": Add to graph the MySqlSchema nodes.
+- "nmap-rules:OracleSid": Add to graph the OracleSid nodes.
 
 # Build & Install
 *JQA_HOME* is the directory where your JQAssistance is installed.
