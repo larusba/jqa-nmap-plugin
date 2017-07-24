@@ -1,7 +1,7 @@
 # jqa-nmap-plugin
 NMap Plugin of jQAssistant. It enables jQAssistant to scan and to analyze nmap xml output. https://www.jqassistant.org
 
-**Current version**: 1.1.3-0.1, compatible with:
+**Current version**: 1.1.3-0.2, compatible with:
 - [Nmap](https://nmap.org/) 7.50
 - [JQAssistant](https://www.jqassistant.org) 1.1.3
 - Java 1.7
