@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 18/07/17.
  */
-public class HostDescriptorStub implements HostDescriptor {
+public class HostDescriptorStub extends DescriptorStub implements HostDescriptor {
 
     String state;
     String address;

@@ -43,12 +43,9 @@ public class XmlNetwork2GraphImpl implements XmlNetwork2Graph {
     }
 
     @Override
-    public FileNetworkDescriptor createGraph(Nmaprun nmap) {
-        FileNetworkDescriptor networkDescriptor = store.create(FileNetworkDescriptor.class);
+    public FileNetworkDescriptor createGraph(Nmaprun nmap, FileNetworkDescriptor networkDescriptor) {
         networkDescriptor.setNetworkName(nmap.getArgs());
-
         networkDescriptor.setHosts(buildHosts(nmap));
-
         return networkDescriptor;
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 18/07/17.
  */
-public class NetworkPortDescriptorStub implements NetworkPortDescriptor {
+public class NetworkPortDescriptorStub extends DescriptorStub implements NetworkPortDescriptor {
     long port;
     String state;
     String protocol;

@@ -25,9 +25,8 @@ public class XmlNetwork2GraphImplTest {
     @Test
     public void testCreateRoot(){
         Nmaprun nmaprun = new Nmaprun();
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         assertNotNull(graph);
-        assertTrue(store.instances.get(FileNetworkDescriptor.class).contains(graph));
     }
 
     @Test
@@ -58,7 +57,7 @@ public class XmlNetwork2GraphImplTest {
 
         hostList.add(host2);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         assertNotNull(graph);
         assertNotNull(graph.getHosts());
         assertEquals(2, graph.getHosts().size());
@@ -70,7 +69,6 @@ public class XmlNetwork2GraphImplTest {
         assertEquals("192.168.1.2",host2Descriptor.getAddress());
         assertEquals("up",host2Descriptor.getState());
 
-        assertTrue(store.instances.get(FileNetworkDescriptor.class).contains(graph));
         assertTrue(store.instances.get(HostDescriptor.class).contains(host1Descriptor));
         assertTrue(store.instances.get(HostDescriptor.class).contains(host2Descriptor));
     }
@@ -97,7 +95,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         assertNotNull(graph.getHosts().get(0).getPorts());
         assertEquals(2,graph.getHosts().get(0).getPorts().size());
         assertEquals(22,graph.getHosts().get(0).getPorts().get(0).getPort());
@@ -137,7 +135,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
 
         assertNotNull(hostDescriptor.getPorts().get(0).getServiceInstance());
@@ -177,7 +175,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
 
         NetworkServiceInstanceDescriptor serviceInstance = hostDescriptor.getPorts().get(0).getServiceInstance();
@@ -211,7 +209,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
         NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
         assertNotNull(networkScriptDescriptor);
@@ -245,7 +243,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
         NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
         NetworkScriptElemDescriptor elemDescriptor = networkScriptDescriptor.getElems().get(0);
@@ -299,7 +297,7 @@ public class XmlNetwork2GraphImplTest {
         host1Content.add(ports);
         hostList.add(host1);
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
         NetworkScriptDescriptor networkScriptDescriptor = hostDescriptor.getPorts().get(0).getScripts().get(0);
         NetworkScriptTableDescriptor tableDescriptor = networkScriptDescriptor.getTables().get(0);
@@ -343,7 +341,7 @@ public class XmlNetwork2GraphImplTest {
         hostList.add(host1);
 
 
-        FileNetworkDescriptor graph = this.service.createGraph(nmaprun);
+        FileNetworkDescriptor graph = this.service.createGraph(nmaprun, new FileNetworkDescriptorStub());
         HostDescriptor hostDescriptor = graph.getHosts().get(0);
 
         assertNotNull(hostDescriptor.getScripts());

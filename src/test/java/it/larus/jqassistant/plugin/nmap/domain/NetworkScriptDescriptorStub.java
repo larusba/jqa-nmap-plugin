@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 19/07/17.
  */
-public class NetworkScriptDescriptorStub implements NetworkScriptDescriptor {
+public class NetworkScriptDescriptorStub extends DescriptorStub implements NetworkScriptDescriptor {
 
     String id;
     List<NetworkScriptElemDescriptor> elems;

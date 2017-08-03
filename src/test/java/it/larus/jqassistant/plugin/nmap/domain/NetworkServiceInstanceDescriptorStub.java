@@ -3,7 +3,7 @@ package it.larus.jqassistant.plugin.nmap.domain;
 /**
  * Created by omar on 18/07/17.
  */
-public class NetworkServiceInstanceDescriptorStub implements NetworkServiceInstanceDescriptor {
+public class NetworkServiceInstanceDescriptorStub extends DescriptorStub implements NetworkServiceInstanceDescriptor {
     private String name;
     private String product;
     private String version;

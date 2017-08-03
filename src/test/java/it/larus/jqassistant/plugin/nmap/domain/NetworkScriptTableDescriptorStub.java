@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 19/07/17.
  */
-public class NetworkScriptTableDescriptorStub implements NetworkScriptTableDescriptor {
+public class NetworkScriptTableDescriptorStub extends DescriptorStub implements NetworkScriptTableDescriptor {
 
     String key;
 
