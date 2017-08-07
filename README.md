@@ -3,7 +3,7 @@ NMap Plugin of jQAssistant. It enables jQAssistant to scan and to analyze nmap x
 
 **Current version**: 1.1.3-0.2, compatible with:
 - [Nmap](https://nmap.org/) 7.50
-- [JQAssistant](https://www.jqassistant.org) 1.1.3
+- [JQAssistant](https://www.jqassistant.org) 1.3.0
 - Java 1.7
 - Neo4j 3.2
                   

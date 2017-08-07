@@ -3,6 +3,7 @@ package it.larus.jqassistant.plugin.nmap.scanner;
 import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
+import com.buschmais.xo.api.Example;
 import com.buschmais.xo.api.Query;
 import it.larus.jqassistant.plugin.nmap.domain.*;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -65,10 +66,20 @@ public class StoreStub implements Store{
     }
 
     @Override
+    public boolean hasActiveTransaction() {
+        return false;
+    }
+
+    @Override
     public <T extends Descriptor> T create(Class<T> aClass) {
         Class stubClass = stubmap.get(aClass);
 
         return (T) addInstance(aClass, stubClass);
+    }
+
+    @Override
+    public <T extends Descriptor> T create(Class<T> type, Example<T> example) {
+        return null;
     }
 
     private <T extends Descriptor> Object addInstance(Class<T> aClass, Class stub) {
@@ -95,6 +106,11 @@ public class StoreStub implements Store{
 
     @Override
     public <S extends Descriptor, R extends Descriptor, T extends Descriptor> R create(S s, Class<R> aClass, T t) {
+        return null;
+    }
+
+    @Override
+    public <S extends Descriptor, R extends Descriptor, T extends Descriptor> R create(S source, Class<R> relationType, T target, Example<R> example) {
         return null;
     }
 
@@ -149,7 +165,8 @@ public class StoreStub implements Store{
     }
 
     @Override
-    public GraphDatabaseService getGraphDatabaseService() {
+    public org.neo4j.graphdb.GraphDatabaseService getGraphDatabaseService() {
         return null;
     }
+
 }

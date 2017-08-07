@@ -3,7 +3,7 @@ package it.larus.jqassistant.plugin.nmap.domain;
 /**
  * Created by omar on 19/07/17.
  */
-public class NetworkScriptElemDescriptorStub implements NetworkScriptElemDescriptor {
+public class NetworkScriptElemDescriptorStub extends DescriptorStub implements NetworkScriptElemDescriptor {
 
     String key;
     String value;

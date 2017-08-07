@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 18/07/17.
  */
-public class NetworkServiceDescriptorStub implements NetworkServiceDescriptor {
+public class NetworkServiceDescriptorStub extends DescriptorStub implements NetworkServiceDescriptor {
 
     List<NetworkServiceInstanceDescriptor> serviceInstances;
     String name;

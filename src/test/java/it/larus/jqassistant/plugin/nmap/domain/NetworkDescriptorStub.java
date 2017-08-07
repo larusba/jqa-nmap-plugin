@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by omar on 18/07/17.
  */
-public class NetworkDescriptorStub implements  NetworkDescriptor{
+public class NetworkDescriptorStub extends DescriptorStub implements NetworkDescriptor{
 
     private String networkName;
     private List<HostDescriptor> hosts;
@@ -29,4 +29,5 @@ public class NetworkDescriptorStub implements  NetworkDescriptor{
     public void setHosts(List<HostDescriptor> hosts) {
         this.hosts = hosts;
     }
+
 }

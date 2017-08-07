@@ -20,10 +20,12 @@ package it.larus.jqassistant.plugin.nmap;
 
 import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
+import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
 import com.buschmais.jqassistant.core.scanner.api.Scope;
 import com.buschmais.jqassistant.core.store.api.Store;
-import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
+import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
+import com.buschmais.jqassistant.plugin.xml.api.scanner.AbstractXmlFileScannerPlugin;
 import it.larus.jqassistant.plugin.nmap.domain.FileNetworkDescriptor;
 import it.larus.jqassistant.plugin.nmap.scanner.XmlNetwork2GraphImpl;
 import it.larus.jqassistant.plugin.nmap.xml.Nmaprun;
@@ -39,7 +41,8 @@ import java.io.InputStream;
 /**
  * Scan the XML output file of nmap command
  */
-public class NMapFileScannerPlugin extends AbstractScannerPlugin<FileResource, FileNetworkDescriptor> {
+@Requires({FileDescriptor.class})
+public class NMapFileScannerPlugin extends AbstractXmlFileScannerPlugin<FileNetworkDescriptor> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NMapFileScannerPlugin.class);
 
@@ -74,21 +77,17 @@ public class NMapFileScannerPlugin extends AbstractScannerPlugin<FileResource, F
     }
 
     @Override
-    public FileNetworkDescriptor scan(FileResource item, String path, Scope scope, Scanner scanner) throws IOException {
+    public FileNetworkDescriptor scan(FileResource fileResource, FileNetworkDescriptor fileNetworkDescriptor, String s, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext context = scanner.getContext();
         final Store store = context.getStore();
-        FileNetworkDescriptor networkDescriptor;
 
-        try (InputStream stream = item.createStream()) {
+        try (InputStream stream = fileResource.createStream()) {
             Nmaprun nmap = unmarshalStream(stream);
-
-            networkDescriptor = new XmlNetwork2GraphImpl(store).createGraph(nmap);
+            return new XmlNetwork2GraphImpl(store).createGraph(nmap, fileNetworkDescriptor);
         }catch (JAXBException e) {
             LOGGER.error("Error during unmarshalling: "+e.getMessage(),e);
             throw new IOException(e);
         }
 
-
-        return networkDescriptor;
     }
 }

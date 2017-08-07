@@ -34,5 +34,5 @@ public interface XmlNetwork2Graph {
      * @param nmap root element of the nmap output
      * @return
      */
-    FileNetworkDescriptor createGraph(Nmaprun nmap);
+    FileNetworkDescriptor createGraph(Nmaprun nmap, FileNetworkDescriptor networkDescriptor);
 }

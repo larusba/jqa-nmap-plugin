@@ -18,10 +18,10 @@
 
 package it.larus.jqassistant.plugin.nmap.domain;
 
-import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
+import com.buschmais.jqassistant.plugin.xml.api.model.XmlFileDescriptor;
 
 /**
  * Only to track the input file
  */
-public interface FileNetworkDescriptor extends NetworkDescriptor, FileDescriptor{
+public interface FileNetworkDescriptor extends NetworkDescriptor, XmlFileDescriptor {
 }
