@@ -22,19 +22,22 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
 import com.buschmais.jqassistant.core.scanner.api.Scope;
+import com.buschmais.jqassistant.core.shared.xml.JAXBUnmarshaller;
 import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
 import com.buschmais.jqassistant.plugin.xml.api.scanner.AbstractXmlFileScannerPlugin;
+import com.buschmais.jqassistant.plugin.xml.api.scanner.XMLFileFilter;
 import it.larus.jqassistant.plugin.nmap.domain.FileNetworkDescriptor;
 import it.larus.jqassistant.plugin.nmap.scanner.XmlNetwork2GraphImpl;
 import it.larus.jqassistant.plugin.nmap.xml.Nmaprun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -44,50 +47,60 @@ import java.io.InputStream;
 @Requires({FileDescriptor.class})
 public class NMapFileScannerPlugin extends AbstractXmlFileScannerPlugin<FileNetworkDescriptor> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NMapFileScannerPlugin.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(NMapFileScannerPlugin.class);
 
-    @Override
-    public boolean accepts(FileResource fileResource, String s, Scope scope) throws IOException {
-        if(s.toLowerCase().endsWith(".xml")){
-            try (InputStream stream = fileResource.createStream()) {
-                unmarshalStream(stream);
+    private static XMLInputFactory factory;
 
-                return true;
-            }catch (JAXBException e) {
-                /*
-                String verbose = System.getProperty("nmap.verbose", "false");
-                if(Boolean.parseBoolean(verbose)){
-                    LOGGER.warn(s+" is not a nmap output file",e);
-                }else {
-                }
-                */
-                LOGGER.debug(s+" is not a nmap output file");
-                return false;
-            }
-
-        }
-        return false;
+    static {
+        factory = XMLInputFactory.newInstance();
+        factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     }
 
-    private Nmaprun unmarshalStream(InputStream stream) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance( "it.larus.jqassistant.plugin.nmap.xml" );
-        Unmarshaller u = jc.createUnmarshaller();
-        Nmaprun nmap = (Nmaprun) u.unmarshal(stream);
-        return nmap;
+    private JAXBUnmarshaller<Nmaprun> jaxbUnmarshaller;
+
+    @Override
+    public void initialize() {
+        jaxbUnmarshaller = new JAXBUnmarshaller<>(Nmaprun.class);
+    }
+
+    @Override
+    public boolean accepts(FileResource fileResource, String path, Scope scope) throws IOException {
+        return path.toLowerCase().endsWith(".xml") && rootElementMatches(fileResource, path, "nmaprun");
     }
 
     @Override
     public FileNetworkDescriptor scan(FileResource fileResource, FileNetworkDescriptor fileNetworkDescriptor, String s, Scope scope, Scanner scanner) throws IOException {
         final ScannerContext context = scanner.getContext();
         final Store store = context.getStore();
-
         try (InputStream stream = fileResource.createStream()) {
-            Nmaprun nmap = unmarshalStream(stream);
-            return new XmlNetwork2GraphImpl(store).createGraph(nmap, fileNetworkDescriptor);
-        }catch (JAXBException e) {
-            LOGGER.error("Error during unmarshalling: "+e.getMessage(),e);
-            throw new IOException(e);
+            return new XmlNetwork2GraphImpl(store).createGraph(jaxbUnmarshaller.unmarshal(stream), fileNetworkDescriptor);
         }
+    }
 
+    /**
+     * Verifies if an XML document has the expected root element.
+     * <p>
+     * NOTE: This method is a copy of {@link XMLFileFilter#rootElementMatches(FileResource, String, String)} which currently does not handle correctly comments before root elements.
+     *
+     * @param fileResource        The {@link FileResource}
+     * @param path                The path of the file.
+     * @param expectedRootElement The name of the expected root element.
+     * @return <code>true</code> if the XML documents has the expected root element.
+     * @throws IOException If an unrecoverable problem occurs.
+     */
+    private static boolean rootElementMatches(FileResource fileResource, String path, String expectedRootElement) throws IOException {
+        try (InputStream stream = fileResource.createStream()) {
+            XMLStreamReader reader = factory.createXMLStreamReader(stream);
+            while (reader.hasNext()) {
+                int event = reader.next();
+                switch (event) {
+                    case XMLStreamConstants.START_ELEMENT:
+                        return expectedRootElement.equals(reader.getLocalName());
+                }
+            }
+        } catch (XMLStreamException e) {
+            LOGGER.warn("Cannot parse XML file '{}'.", path);
+        }
+        return false;
     }
 }
