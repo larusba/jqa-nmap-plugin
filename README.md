@@ -9,6 +9,7 @@ NMap Plugin of jQAssistant. It enables jQAssistant to scan and to analyze nmap x
                   
 # Graph
 The scan operation creates the nodes with labels: 
+- NMap (for all)
 - Network
 - Host
 - NetworkPort
@@ -59,4 +60,10 @@ and call the concepts
 and then run the analize phase
 ```
 ./bin/jqassistant.sh analyze -groups "my-rules:MyGroup"
+```
+
+# Query Example
+To find which kind of services are running on hosts:
+```
+match p=(:Host)-[*..3]-(:NetworkService) return p
 ```
