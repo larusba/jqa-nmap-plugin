@@ -4,7 +4,7 @@ NMap Plugin of jQAssistant. It enables jQAssistant to scan and to analyze nmap x
 **Current version**: 1.4.0-0.1, compatible with:
 - [Nmap](https://nmap.org/) 7.50
 - [JQAssistant](https://www.jqassistant.org) 1.4.0
-- Java 1.7
+- Java 1.8
 - Neo4j 3.2
                   
 # Graph
@@ -42,7 +42,7 @@ nmap -T4 -A -p 1-1000 -oX network.xml scanme.nmap.org
 ./bin/jqassistant.sh scan -reset -f network.xml
 ./bin/jqassistant.sh server
 ```
-# Analyze Example
+# Analize Example
 Run the concepts over the graph. First you have to create a rules file
 ```
 touch $JQA_HOME/jqassistant/rules/rules.xml
